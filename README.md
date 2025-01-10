@@ -1,60 +1,54 @@
-# # Pitt HexAI Computer Vision Challenge: Automatic Joint Space Width Measurement
+# Automated Measurement of Knee Joint Space Width (JSW) from Radiographs Using Deep Learning
 
-## Challenge Overview
-The objective of this challenge is to develop a deep learning-based pipeline for the automated measurement of knee joint space width (JSW) from knee X-rays. Accurate JSW measurement is critical for diagnosing and monitoring knee osteoarthritis (KOA). Your solution should utilize computer vision techniques to ensure consistency and reproducibility through the following key steps:
+## Overview
+Knee osteoarthritis (KOA) is a degenerative joint condition that is often characterized by the narrowing of the knee joint space width (JSW). Traditional methods for measuring JSW are manual, time-intensive and are subject to variability. Thus, developing accurate and consistent methods for JSW measurement is essential for both diagnosing and monitoring the progression of KOA. 
 
-1.	Localization of the Knee Joint Area
-2.	Segmentation of the Knee Joint Space
-3.	Measurement of Joint Space Width
+This project aims to develop a deep learning-based pipeline for the automated measurement of JSW from knee radiographs. The proposed pipeline integrates computer vision techniques for knee joint localization, joint space segmentation, and JSW measurement. By utlizing state-of-the-art models such as YOLOv11 and U-Net, the project seeks to achieve high accuracy and robustness in JSW prediction, thereby advancing clinical assessment tools for KOA.
 
-***Important Note: This challenge must be completed individually. Collaboration or seeking assistance from others is not allowed. Additionally, the use of generative AI tools (e.g., ChatGPT, Gemini, Ollama, or similar) is strictly prohibited. Submissions found to rely on such tools for code generation or methodology will be disqualified.***
+## Objectives
+The primary objectives for this project is to design and evaluate a comprehensive deep learning pipeline for automated JSW measurement. The specific objectives include:
+
+1. Localization of the Knee Joint Area:
+   - Train and validate a YOLOv11 model to detect and localize the left and right knee joints in complete radiographs.
+   - Evaluate the localization accuracy using bounding box prediction on unseen test data
+  
+2. Segmentation of the Knee Joint Space
+   - Develop a segmentation model based on U-net to segment the knee joint space
+   - Utilize the YOLOv11-based cropped radiographs/segmentation masks for training 
+   - Assess overall segmentatation performance using Intersection over Union (IoU) and Dice score
+  
+3. Measurement of JSW:
+   - Train a predictive model to measure JSW for the medial and lateral compartments
+   - Use both radiographs and segmentation masks and features to the measurement model
+  
+4. Testing on Unseen Data
+   - Test the developed pipeline end-to-end on unseen radiographs to predict the medial and lateral JSW values
+   - Evaluate the robustness and generalizability of the pipeline
+  
 
 ## Dataset
-The dataset, which can be downloaded [from Google Drive using this link](https://drive.google.com/file/d/1TtAJUFsw3jbhbSdfxvt0FCyTw9PFOmvr/view?usp=sharing), consists of the following components:
-- Training.zip: This file contains the following directories and files
-  - Images: Contains a set of 643 knee radiographs for training, validation, and testing of YoloV11, segmentation, and JSW models. 
-  - Localization_Annotations: Contains bounding box annotations for the provided images for training, validating, and testing a YOLOv11 localization model
-  - Segmentation_Annotations: Includes knee radiographs and corresponding knee bony anatomy segmentation masks for a subset of the provided images for training, validating, and testing a segmentation model.
-  -	Measurements.csv: Provides ground truth measurements of the knee joint space for both the medial and lateral compartments for the left and right knees (SIDE = 1 is Left, Side=2 is Right)
-  -	***Note: You should use this data for training, validation, and testing individual components of your pipeline. This will be needed for certain parts of your pipeline!***
-- Test.zip: Contains unannotated and uncropped knee radiographs to evaluate your final pipeline on unseen data. The labels are not included with the test data. 
+The dataset for this project consists of annotated knee radiographs and associated metadata, structured as follows:
 
-## Challenge Tasks
-### Task 1: Localization of the Knee Joint Area
-- Create a train, validation, and test set that can be utilized by YOLOv11. Note: You will need to convert provided annotations to YOLO format. 
-- Train and validate a YOLOv11 model using the provided Localization dataset to detect the left and right knee joints. ***Hint: Look into using the Ultralytics library.***
-- Submit bounding box predictions for your test images and include a few sample visualizations of the results.
+Training Dataset:
+- Images: 643 knee radiographs for training, validation, and testing across the pipeline tasks.
+- Localization Annotations: Bounding box annotations for knee joint localization in PASCAL-VOC format.
+- Segmentation Annotations: Binary masks of knee bony anatomy for a subset of images.
+- Measurements.csv: Ground truth JSW measurements (medial and lateral compartments) for both left and right knees.
 
-### Task 2: Localizing the Segmentation Dataset
-- Convert the knee bony anatomy segmentation masks to binary masks. ***Hint: Use SimpleITK to load the annotations***
-- Apply your trained YOLO model to crop the knee joint regions from the radiographs and annotations in the Segmentation dataset.
-- Output cropped images and their corresponding annotation masks.
 
-### Task 3: Knee Joint Space Segmentation
-- Train and validate s U-Net model using the cropped knee radiographs and annotation masks from Task 2 to segment the knee joint space. ***Hint: Look into using the PyTorch Segmentation Models library***
--	Provide segmentation predictions and evaluation metrics for your test set, including a few sample masks.
+Test Dataset:
+- Images: Unannotated knee radiographs for evaluating the final pipeline.
+- Labels: Ground truth JSW measurements are withheld to assess model performance.
 
-### Task 4: JSW Measurement 
-- Train and validate a model to measure the JSW for the medial and lateral compartments using both the cropped knee images and segmentation masks. The provided dataset (measurements.csv) provides measurements across the medial and lateral joint. (Medial = Measures start with V00JSW and Lateral = Measures start with V00LJSW)
--	Report the JSW measurements for your test set.
--	For reference, you may consult the following paper: https://ieeexplore.ieee.org/abstract/document/10635236. 
+Data Usage:
+- Localization tasks will use bounding box annotations to train YOLOv11.
+- Segmentation tasks will utilize the cropped radiographs and corresponding segmentation masks to train U-Net.
+- JSW measurement tasks will leverage the radiographs, segmentation outputs, and measurements.csv for training and validation.
 
-### Task 5: Testing on Unseen Data
--	Apply your full pipeline to the radiographs in Test.zip and generate final JSW predictions for the medial and lateral compartments.
--	Submit the final JSW measurements in a CSV file.
 
-## Submission Requirements
-1.	Code: Provide all scripts, along with clear instructions on how to run them.
-2.	Write-Up: Include a detailed explanation of the methods and results for each task.
-3.	Final Output: Submit a CSV file containing JSW measurements for the unseen test set.
+## Evaluation Metrics:
+The pipeline models will be evaluated using the following metricsL
+- Localization: mean Average Precision (mAP).
+- Segmentation: IoU and Dice coefficient.
+- JSW measurement: Mean Absolute Error (MAE) and R^2
 
-Please upload and share your code, results, and write-up in a shared OneDrive or Google Drive folder. Share the directory with: ngl18@pitt.edu. 
-
-## Evaluation Criteria
-Submissions will be evaluated based on:
--	Accuracy of localization, segmentation, and JSW measurement.
--	Robustness of the pipeline on unseen test data.
--	Clarity of the documentation and reproducibility of the code.
-
-## Due Date
-This challenge is due on Monday, December 30, 2024 by 11:59pm. 
