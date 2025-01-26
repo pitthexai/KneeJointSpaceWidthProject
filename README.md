@@ -27,7 +27,7 @@ The primary objectives for this project is to design and evaluate a comprehensiv
   
 
 ## Dataset
-The dataset for this project consists of annotated knee radiographs and associated metadata, structured as follows:
+The dataset for this project, which can be downloaded [from Google Drive using this link](https://drive.google.com/file/d/1TtAJUFsw3jbhbSdfxvt0FCyTw9PFOmvr/view?usp=sharing), consists of annotated knee radiographs and associated metadata, structured as follows:
 
 Training Dataset:
 - Images: 643 knee radiographs for training, validation, and testing across the pipeline tasks.
